@@ -1,0 +1,159 @@
+---
+title: "My first Awesome Project (MAP-1)"
+subtitle: "Experiment"
+author: "Heinrich Paessens -- paessens|macro.finance"
+abstract: > 
+  This document is for ...documentation of requirements, implementation and testing. The application is a simple demonstration of End-User-Computing, or Prototyping for that purpose, with a certain software stack and certain specified cornerstones in software development which provides compliance with regulatory minimum requirements and provisions or guidelines (like DORA). 
+date: '2026-03-15'
+date-modified: "`r Sys.Date()`"
+lang: en
+format: 
+  html:
+    fontsize: 13pt
+    page-layout: article
+    code-summary: "Show the code"
+    code-fold: true
+    code-link: true
+    code-copy: true
+    code-overflow: scroll
+    code-line-numbers: false
+    code-block-bg: true
+    code-block-border-left: "#31BAE9"
+    code-annotations: false
+    code-tools: 
+      source: false
+      toggle: true
+      caption: none
+    grid: 
+      margin-width: 350px
+    html-math-method: katex
+    embed-resources: true
+    smooth-scroll: true
+lightbox: true
+fig-format: 'svg'
+fig-width: 24
+fig-height: 15
+fig-show: hold
+fig.align: center
+tbl.align: center
+cap-location: margin
+fig-cap-location: margin
+tbl-cap-location: margin
+reference-location: margin
+citation-location: document
+anchor-sections: true
+number-sections: true
+number-depth: 3
+toc: true
+toc-location: left
+toc-depth: 3
+number-offset: [3,3,3]
+editor: visual
+execute:
+  cache: true
+  include: true
+  eval: true
+  echo: true
+  error: true
+  warning: false
+knitr:
+  opts_chunk: 
+    cache: true
+    message: false
+    warning: false
+    error: true
+bibliography: lit/ref.bib
+bibliographystyle: apa
+citations-hover: true
+crossrefs-hover: true
+author-meta: 'Heinrich Paessens'
+copyright: 'Heinrich Paessens (c)2026'
+---
+
+## Introduction
+
+### Purpose
+
+### Target Audience
+
+### Use Cases[^1]
+
+[^1]: A use case is a structured description of a system’s behaviour as it responds to requests from external actors, aiming to achieve a specific goal. Specification follows personas in scenarios and maybe visual modelling is supportive here. The context is to focus on usage-centered and activity-centered design, in particular regarding user-interfaces, eventually to get user acceptance.
+
+## Requirements
+
+### Functional Req.[^2]
+
+[^2]: [Functional requirements](https://en.wikipedia.org/wiki/Functional_requirement) (FRs) define what a software system must do, specifying it's behaviors, actions, and features, such as user authentication, data processing, and report generation. It defines *what* the system does (features, behavior).
+
+### Non-Functional Req.[^3]
+
+[^3]: [Non-functional requirements](https://en.wikipedia.org/wiki/Non-functional_requirement)(NFRs) define system attributes such as security, reliability, performance, and usability, specifying "how well" a system performs rather than "what" it does. They act as constraints on the design or implementation, often referred to as '-ilities' (e.g., scalability, maintainability). It's reagarding system quality as well as it considers legal compliance. Sometimes conflicting requirements need choices on trade off and cinsidering technological options available.
+
+## Design
+
+### Data Management
+
+### Business Logic (Rules & Functions)
+
+### User Interface (Presentation Layer)
+
+### Security
+
+### APIs
+
+## Quality Assurance (QA)
+
+### QA by design
+
+### Policies & Procedures
+
+### Technical Tests
+
+### User Acceptance Tests
+
+### Approvals (by role)
+
+## Develop & Implement[^4]
+
+[^4]: Here we do ["Literate Programming"](Literate%20programming), hence integrate source code, execution and presentation. Algorithms are described by readable and comprehensible real code (interpreted) not "pseudo code". The final product might have a different structure, considering optimised compile code and compiler needs & requirements.
+
+### Prototyping
+
+download and read a table of FX fixings from ECB (website)
+
+```{r}
+fx <- fread('https://www.ecb.europa.eu/stats/eurofxref/eurofxref-hist.zip')
+```
+
+read a spreadsheet for complenting data
+
+```{r}
+evt <- read_xlsx('data/events2.xlsx',detect_dates=TRUE)|>setDT(key='date')
+```
+
+convert data into time-series-objects, subset (filter) and plot together
+
+```{r}
+events <- xts(evt$event,evt$date)['2000::2026-02']
+USD.EUR <- fx[Date > '1999-12-31', .(Date,USD)]|>as.xts.data.table()
+USD.EUR|>plot(grid.ticks.lty="dotted",lwd=1,col='navy',log=FALSE,ylim=c(.8,1.7))
+addEventLines(events,col="#FF5733",lty=1.5,lwd=1.5, srt=90, pos=2,offset=.3,on=0)
+```
+
+write data to spreadsheet -- but that roundtrip is trivial
+
+```{r}
+usd <- fx[Date > '1999-12-31', .(Date,USD)]
+usd|>write_xlsx('testing.xlsx',as_table=TRUE)
+```
+
+### Testing
+
+### Final Stage Product
+
+## Operations & Production
+
+### Deployment
+
+### Maintenance
